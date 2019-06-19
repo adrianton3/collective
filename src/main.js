@@ -36,7 +36,7 @@
 		}, 5000)
 		*/
 
-		;[...'ABCDEFGHIJ'].forEach((char) => {
+		;[...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].forEach((char) => {
 			const button = document.createElement('button')
 			button.textContent = char
 			button.addEventListener('click', () => {
