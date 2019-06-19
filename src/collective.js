@@ -10,27 +10,22 @@
 	const startOffset = 40
 
 	function Collective (edgeMin, edgeMax) {
-		this.edgeMin = edgeMin
-		this.edgeMax = edgeMax
+		this.edgeMin = edgeMin.clone()
+		this.edgeMax = edgeMax.clone()
+
+		this.beyondMin = edgeMin.clone().sub(new Vec2(startOffset, startOffset))
+		this.beyondMax = edgeMax.clone().add(new Vec2(startOffset, startOffset))
 
 		this.bugs = []
 		this.freeBugs = []
 	}
 
-	Collective.prototype.findLocationBeyondEdgeHoriz = function (location) {
-		const x = location.x - this.edgeMin.x < this.edgeMax.x - location.x
-			? this.edgeMin.x - startOffset
-			: this.edgeMax.x + startOffset
-
-		return new Vec2(x, location.y)
-	}
-
-	Collective.prototype.findLocationBeyondEdgeVert = function (location) {
-		const y = location.y - this.edgeMin.y < this.edgeMax.y - location.y
-			? this.edgeMin.y - startOffset
-			: this.edgeMax.y + startOffset
-
-		return new Vec2(location.x, y)
+	Collective.prototype.findLocationBeyondEdge = function (location) {
+		return location.clone()
+			.add(new Vec2((Math.random() -.5) * 50., (Math.random() -.5) * 50.))
+			.normalize()
+			.scale(this.edgeMax.x - this.edgeMin.x + this.edgeMax.y - this.edgeMin.y)
+			.clamp(this.beyondMin, this.beyondMax)
 	}
 
 	function sample (array) {
@@ -79,7 +74,7 @@
 			return maybeBug
 		}
 
-		const locationNew = this.findLocationBeyondEdgeHoriz(location)
+		const locationNew = this.findLocationBeyondEdge(location)
 		locationNew.add(new Vec2(0., Math.random() * 10. - 5.))
 		const bugNew = new Bug(this, locationNew, location)
 		this.bugs.push(bugNew)
@@ -88,7 +83,7 @@
 
 	Collective.prototype.free = function (bug) {
 		bug.state = 'free'
-		bug.setTarget(this.findLocationBeyondEdgeVert(bug.location))
+		bug.setTarget(this.findLocationBeyondEdge(bug.location))
 
 		removeFirst(this.bugs, bug)
 		this.freeBugs.push(bug)

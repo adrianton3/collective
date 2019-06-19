@@ -49,6 +49,13 @@
 		return this
 	}
 
+	Vec2.prototype.clamp = function (min, max) {
+		this.x = Math.max(Math.min(this.x, max.x), min.x)
+		this.y = Math.max(Math.min(this.y, max.y), min.y)
+
+		return this
+	}
+
 	Vec2.prototype.lerp = function (other, fraction) {
 		return new Vec2(
 			(this.x * fraction + other.x * (1. - fraction)) * .5,
