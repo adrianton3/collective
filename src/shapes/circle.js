@@ -7,17 +7,17 @@
 		shapeProto,
 	} = window.ba
 
-	function Circle (collective, location, radius) {
-		this.location = location
+	function Circle (collective, center, radius, density = .9) {
+		this.location = center
 		this.radius = radius
-		this.rotation = 0
+		this.rotation = 0.
 
-		const count = radius * 2. * Math.PI / Bug.prototype.radius
+		const count = Math.floor(radius * Math.PI * density / Bug.prototype.radius)
 
 		this.bugs = []
 
 		for (let i = 0; i < count; i++) {
-			const location = location.clone().add(new Vec2(
+			const location = center.clone().add(new Vec2(
 				Math.cos(i * Math.PI * 2. / count),
 				Math.sin(i * Math.PI * 2. / count),
 			).scale(radius))
