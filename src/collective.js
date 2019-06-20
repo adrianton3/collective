@@ -75,6 +75,7 @@
 			this.bugs.push(maybeBug)
 
 			maybeBug.state = 'active'
+			maybeBug.weight = .9
 			maybeBug.setTarget(location)
 			return maybeBug
 		}
@@ -88,6 +89,7 @@
 
 	Collective.prototype.free = function (bug) {
 		bug.state = 'free'
+		bug.weight = 1.1
 		bug.setTarget(this.findLocationBeyondEdge(bug.location))
 
 		removeFirst(this.bugs, bug)

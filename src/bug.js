@@ -10,6 +10,7 @@
 		this.location = location.clone()
 		this.target = target.clone()
 		this.velocity = new Vec2(0., 0.)
+		this.weight = 1.
 		this.sprite = null
 		this.state = 'active'
 
@@ -29,7 +30,7 @@
 			const distanceActual = this.location.distance(fixed.location)
 			const distanceMin = this.radius + fixed.radius
 			if (distanceActual < distanceMin) {
-				const exit = this.location.clone().sub(fixed.location).normalize().scale(distanceMin * .02)
+				const exit = this.location.clone().sub(fixed.location).normalize().scale(distanceMin * this.weight * .025)
 				this.velocity.add(exit)
 			}
 		})
