@@ -18,6 +18,12 @@
 
 		this.bugs = []
 		this.freeBugs = []
+
+		this.avoider = new Vec2(0., 0.)
+	}
+
+	Collective.prototype.setAvoider = function (location) {
+		this.avoider.copy(location)
 	}
 
 	Collective.prototype.findLocationBeyondEdge = function (location) {
@@ -109,11 +115,13 @@
 		Space.add(space, this.freeBugs)
 
 		this.bugs.forEach((bug) => {
+			bug.applyOverlapping([{ location: this.avoider, radius: 60. }])
 			bug.applyOverlapping(Space.getOverlapping(space, bug))
 			bug.applyTarget()
 		})
 
 		this.freeBugs.forEach((bug) => {
+			bug.applyOverlapping([{ location: this.avoider, radius: 60. }])
 			bug.applyOverlapping(Space.getOverlapping(space, bug))
 			bug.applyTarget()
 		})
