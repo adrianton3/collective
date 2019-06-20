@@ -36,6 +36,13 @@
 		}, 5000)
 		*/
 
+		{
+			const circle = new ba.Circle(collective, new Vec2(0., 0.), 150., .7)
+			setInterval(() => {
+				circle.setRotation(performance.now() * .0003)
+			}, 30)
+		}
+
 		;[...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].forEach((char) => {
 			const button = document.createElement('button')
 			button.textContent = char
