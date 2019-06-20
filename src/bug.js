@@ -63,6 +63,11 @@
 	}
 
 	Bug.prototype.draw = function (draw, images) {
+		if (this.velocity.length() < .001) {
+			draw.image(images[`d0`], this.location.x, this.location.y)
+			return
+		}
+		
 		if (Math.abs(this.velocity.x) > Math.abs(this.velocity.y)) {
 			if (this.velocity.x > 0.) {
 				draw.image(images[`r${this.frameIndex + 1}`], this.location.x, this.location.y)
