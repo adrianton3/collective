@@ -39,8 +39,13 @@
 
 		const tries = Math.min(this.freeBugs.length, 10)
 
-		let bug = sample(this.freeBugs)
-		let distanceMin = bug.location.distance(location)
+		let bug = null
+		let distanceMin = Math.min(
+			location.x - this.beyondMin.x,
+			location.y - this.beyondMin.y,
+			location.x + this.beyondMax.x,
+			location.y + this.beyondMax.y,
+		)
 
 		for (let i = 0; i < tries; i++) {
 			const candidate = sample(this.freeBugs)
@@ -95,7 +100,7 @@
 			Math.abs(this.edgeMin.y),
 			Math.abs(this.edgeMax.x),
 			Math.abs(this.edgeMax.y),
-		) + startOffset + Bug.prototype.radius * 2
+		) + startOffset + Bug.prototype.radius * 4
 
 		const space = Space.make({ resolution: 32, halfWidth })
 		Space.add(space, this.bugs)
