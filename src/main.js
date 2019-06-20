@@ -8,7 +8,8 @@
 	} = window.ba
 
 	function setup ({ images }) {
-		Draw.init(document.getElementById('can'))
+		const canvas = document.getElementById('can')
+		Draw.init(canvas)
 		Draw.clearColor('hsl(220, 20%, 50%)')
 
 		const collective = new Collective(new Vec2(-256., -256.), new Vec2(256., 256.))
@@ -35,6 +36,14 @@
 			cookie1.setLocation(new Vec2(Math.random() * 200. - 100., Math.random() * 200. - 100.))
 		}, 5000)
 		*/
+
+		canvas.addEventListener('mousemove', (event) => {
+			collective.setAvoider(
+				new Vec2(event.offsetX, event.offsetY).sub(
+					new Vec2(canvas.width, canvas.height).scale(.5)
+				)
+			)
+		})
 
 		{
 			const circle = new ba.Circle(collective, new Vec2(0., 0.), 150., .7)
