@@ -65,21 +65,23 @@
 
 	Bug.prototype.draw = function (draw, images) {
 		if (this.velocity.length() < .001) {
-			draw.image(images[`d0`], this.location.x, this.location.y)
+			draw.image(images[`d-s`], this.location.x, this.location.y)
 			return
 		}
+
+		const speed = this.velocity.length() > .1 ? 'f' : 'h'
 		
 		if (Math.abs(this.velocity.x) > Math.abs(this.velocity.y)) {
 			if (this.velocity.x > 0.) {
-				draw.image(images[`r${this.frameIndex + 1}`], this.location.x, this.location.y)
+				draw.image(images[`r-${this.frameIndex}${speed}`], this.location.x, this.location.y)
 			} else {
-				draw.image(images[`l${this.frameIndex + 1}`], this.location.x, this.location.y)
+				draw.image(images[`l-${this.frameIndex}${speed}`], this.location.x, this.location.y)
 			}
 		} else {
 			if (this.velocity.y > 0.) {
-				draw.image(images[`d${this.frameIndex + 1}`], this.location.x, this.location.y)
+				draw.image(images[`d-${this.frameIndex}${speed}`], this.location.x, this.location.y)
 			} else {
-				draw.image(images[`u${this.frameIndex + 1}`], this.location.x, this.location.y)
+				draw.image(images[`u-${this.frameIndex}${speed}`], this.location.x, this.location.y)
 			}
 		}
 	}
