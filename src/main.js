@@ -40,8 +40,9 @@
 			const button = document.createElement('button')
 			button.textContent = char
 			button.addEventListener('click', () => {
-				const cookie = new ba.Cookie(collective, new Vec2(0., 0.), ba.Cookie.patterns[char])
-				setTimeout(() => { cookie.free() }, 3000)
+				const cookie = new ba.Cookie(collective, new Vec2(150., 0.), ba.Cookie.patterns[char])
+				setTimeout(() => { cookie.setLocation(new Vec2(-150., 0.)) }, 3000)
+				setTimeout(() => { cookie.free() }, 6000)
 			})
 
 			document.body.appendChild(button)
