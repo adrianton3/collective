@@ -13,6 +13,7 @@
 		this.weight = 1.
 		this.sprite = null
 		this.state = 'active'
+		this.friend = null
 
 		this.frameIndex = 0
 		this.frameFraction = 0.
@@ -38,6 +39,18 @@
 
 	Bug.prototype.applyTarget = function () {
 		const delta = this.target.clone().sub(this.location)
+
+		if (delta.length() <= this.stepMax) {
+			this.velocity.add(delta.scale(.5))
+		} else {
+			this.velocity.add(delta.normalize().scale(this.stepMax))
+		}
+	}
+
+	Bug.prototype.applyFriend = function () {
+		const delta = this.friend.location.clone().sub(this.location)
+		const length = delta.length()
+		delta.normalize().scale(length - (this.radius + this.friend.radius + 2.))
 
 		if (delta.length() <= this.stepMax) {
 			this.velocity.add(delta.scale(.5))
