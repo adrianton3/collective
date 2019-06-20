@@ -69,7 +69,7 @@
 			return
 		}
 
-		const speed = this.velocity.length() > .1 ? 'f' : 'h'
+		const speed = this.velocity.length() > .21 ? 'f' : 'h'
 		
 		if (Math.abs(this.velocity.x) > Math.abs(this.velocity.y)) {
 			if (this.velocity.x > 0.) {
