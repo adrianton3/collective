@@ -26,7 +26,7 @@
 	Object.assign(Line.prototype, shapeProto)
 
 	Line.prototype.setLocation = function (location) {
-		const halfDelta = this.from.clone().sub(this.to).lerp(.5)
+		const halfDelta = this.from.lerp(this.to, .5)
 
 		this.from.copy(location.clone().sub(halfDelta))
 		this.to.copy(location.clone().add(halfDelta))
