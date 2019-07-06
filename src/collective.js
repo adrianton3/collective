@@ -20,6 +20,8 @@
 		this.freeBugs = []
 
 		this.avoider = new Vec2(0., 0.)
+
+		this.halfDiagonal = Math.hypot(this.edgeMax.x - this.edgeMin.x, this.edgeMax.y - this.edgeMin.x) / 2
 	}
 
 	Collective.prototype.setAvoider = function (location) {
@@ -30,7 +32,7 @@
 		return location.clone()
 			.add(new Vec2((Math.random() -.5) * 50., (Math.random() -.5) * 50.))
 			.normalize()
-			.scale(this.edgeMax.x - this.edgeMin.x + this.edgeMax.y - this.edgeMin.y)
+			.scale(this.halfDiagonal)
 			.clamp(this.beyondMin, this.beyondMax)
 	}
 
