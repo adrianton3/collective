@@ -17,7 +17,7 @@
 
 		stage = new PIXI.Container()
 
-		bugContainer = new PIXI.ParticleContainer(100, {
+		bugContainer = new PIXI.ParticleContainer(200, {
 			scale: false,
 			position: true,
 			rotation: false,
