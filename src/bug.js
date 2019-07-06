@@ -11,6 +11,7 @@
 		this.target = target.clone()
 		this.velocity = new Vec2(0., 0.)
 		this.weight = 1.
+		this.pressure = 0.
 		this.sprite = null
 		this.state = 'active'
 		this.friend = null
@@ -30,9 +31,15 @@
 		overlapping.forEach((fixed) => {
 			const distanceActual = this.location.distance(fixed.location)
 			const distanceMin = this.radius + fixed.radius
+
 			if (distanceActual < distanceMin) {
-				const exit = this.location.clone().sub(fixed.location).normalize().scale(distanceMin * this.weight * .025)
+				const exit = this.location.clone().sub(fixed.location)
+					.normalize()
+					.scale(distanceMin * this.weight * .025 * (this.pressure + 1.))
+
 				this.velocity.add(exit)
+
+				this.pressure += Math.random() * .05 + .05
 			}
 		})
 	}
@@ -62,6 +69,8 @@
 	Bug.prototype.advance = function (deltaTime) {
 		this.location.add(this.velocity)
 		this.velocity.scale(.1)
+
+		this.pressure *= .8
 
 		this.frameFraction += this.velocity.length() * .9
 		this.frameFraction = this.frameFraction % 2.
