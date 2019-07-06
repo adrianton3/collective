@@ -20,6 +20,8 @@
 		this.freeBugs = []
 
 		this.avoider = new Vec2(0., 0.)
+
+		this.halfDiagonal = Math.hypot(this.edgeMax.x - this.edgeMin.x, this.edgeMax.y - this.edgeMin.x) / 2
 	}
 
 	Collective.prototype.setAvoider = function (location) {
@@ -30,12 +32,35 @@
 		return location.clone()
 			.add(new Vec2((Math.random() -.5) * 50., (Math.random() -.5) * 50.))
 			.normalize()
-			.scale(this.edgeMax.x - this.edgeMin.x + this.edgeMax.y - this.edgeMin.y)
+			.scale(this.halfDiagonal)
 			.clamp(this.beyondMin, this.beyondMax)
 	}
 
 	function sample (array) {
 		return array[Math.floor(Math.random() * array.length)]
+	}
+
+	Collective.prototype.findActiveBug = function (location) {
+		if (this.bugs.length === 0) {
+			return null
+		}
+
+		const tries = Math.min(this.bugs.length, 10)
+
+		let bug = sample(this.bugs)
+		let distanceMin = bug.location.distance(location)
+
+		for (let i = 0; i < tries; i++) {
+			const candidate = sample(this.bugs)
+			const distanceActual = candidate.location.distance(location)
+
+			if (distanceActual < distanceMin) {
+				distanceMin = distanceActual
+				bug = candidate
+			}
+		}
+
+		return bug
 	}
 
 	Collective.prototype.findFreeBug = function (location) {
@@ -83,6 +108,7 @@
 			maybeBug.state = 'active'
 			maybeBug.weight = .9
 			maybeBug.setTarget(location)
+			maybeBug.friend = null
 			return maybeBug
 		}
 
@@ -100,6 +126,10 @@
 
 		removeFirst(this.bugs, bug)
 		this.freeBugs.push(bug)
+
+		// if (Math.random() < .3) {
+		// 	bug.friend = this.findActiveBug(bug.location)
+		// }
 	}
 
 	Collective.prototype.advance = function (deltaTime) {
@@ -123,7 +153,12 @@
 		this.freeBugs.forEach((bug) => {
 			bug.applyOverlapping([{ location: this.avoider, radius: 60. }])
 			bug.applyOverlapping(Space.getOverlapping(space, bug))
-			bug.applyTarget()
+
+			if (bug.friend === null) {
+				bug.applyTarget()
+			} else {
+				bug.applyFriend()
+			}
 		})
 
 		this.bugs.forEach((bug) => { bug.advance(deltaTime) })

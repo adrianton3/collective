@@ -5,37 +5,27 @@
 		Vec2,
 		Collective,
 		loadImages,
+		renderer,
 	} = window.ba
+
+
+	function setupCamera (canvas, renderer) {
+		let scale = 1.
+
+		canvas.addEventListener('wheel', (event) => {
+			scale = Math.max(.25, Math.min(1.5, scale - event.deltaY * .0005))
+			renderer.setScale(scale)
+		})
+	}
 
 	function setup ({ images }) {
 		const canvas = document.getElementById('can')
-		Draw.init(canvas)
-		Draw.clearColor('hsl(220, 20%, 50%)')
+
+		renderer.init(canvas)
+
+		setupCamera(canvas, renderer)
 
 		const collective = new Collective(new Vec2(-256., -256.), new Vec2(256., 256.))
-
-		// const line0 = new ba.Line(collective, new Vec2(100., 200.), new Vec2(200., 100.))
-		// const line1 = new ba.Line(collective, new Vec2(-100., -200.), new Vec2(-200., -100.))
-
-		/*
-		const cookie0 = new ba.Cookie(collective, new Vec2(100., 0.), ba.Cookie.patterns['A'])
-		const cookie1 = new ba.Cookie(collective, new Vec2(0., 100.), ba.Cookie.patterns['C'])
-
-		setInterval(() => {
-			// line0.update(
-			// 	new Vec2(Math.random() * 400. - 200., Math.random() * 400. - 200.),
-			// 	new Vec2(Math.random() * 400. - 200., Math.random() * 400. - 200.),
-			// )
-			//
-			// line1.update(
-			// 	new Vec2(Math.random() * 400. - 200., Math.random() * 400. - 200.),
-			// 	new Vec2(Math.random() * 400. - 200., Math.random() * 400. - 200.),
-			// )
-
-			cookie0.setLocation(new Vec2(Math.random() * 200. - 100., Math.random() * 200. - 100.))
-			cookie1.setLocation(new Vec2(Math.random() * 200. - 100., Math.random() * 200. - 100.))
-		}, 5000)
-		*/
 
 		canvas.addEventListener('mousemove', (event) => {
 			collective.setAvoider(
@@ -52,6 +42,29 @@
 			}, 30)
 		}
 
+		// {
+		// 	const grid = new ba.Grid(collective, new Vec2(0., 0.), new Vec2(100., 0.), new Vec2(0., 100.))
+
+		// 	let state = true
+		// 	setInterval(() => {
+		// 		if (state) {
+		// 			grid.setEnds(new Vec2(0., 0.), new Vec2(250., -150.), new Vec2(0., 200.))
+		// 		} else {
+		// 			grid.setEnds(new Vec2(0., 0.), new Vec2(150., 150.), new Vec2(0., 100.))
+		// 		}
+
+		// 		state = !state
+		// 	}, 1000)
+		// }
+
+		// {
+		// 	const grid = new ba.Grid(collective, new Vec2(-250., -250.), new Vec2(500., 0.), new Vec2(0., 500.))
+		//
+		// 	setTimeout(() => {
+		// 			grid.free()
+		// 	}, 10000)
+		// }
+
 		;[...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].forEach((char) => {
 			const button = document.createElement('button')
 			button.textContent = char
@@ -64,7 +77,6 @@
 			document.body.appendChild(button)
 		})
 
-
 		return { collective, images }
 	}
 
@@ -75,13 +87,7 @@
 			collective.advance((timeNow - timePrevious) * .001)
 			timePrevious = timeNow
 
-			Draw.clear()
-
-			Draw.save()
-			Draw.translate(256., 256.)
-			collective.draw(Draw, images)
-			Draw.restore()
-
+			renderer.draw(collective.bugs, collective.freeBugs)
 			requestAnimationFrame(step)
 		}
 

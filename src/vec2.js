@@ -58,8 +58,8 @@
 
 	Vec2.prototype.lerp = function (other, fraction) {
 		return new Vec2(
-			(this.x * fraction + other.x * (1. - fraction)) * .5,
-			(this.y * fraction + other.y * (1. - fraction)) * .5,
+			this.x * (1. - fraction) + other.x * fraction,
+			this.y * (1. - fraction) + other.y * fraction,
 		)
 	}
 
