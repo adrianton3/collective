@@ -57,13 +57,22 @@
 		// 	}, 1000)
 		// }
 
-		// {
-		// 	const grid = new ba.Grid(collective, new Vec2(-250., -250.), new Vec2(500., 0.), new Vec2(0., 500.))
-		//
-		// 	setTimeout(() => {
-		// 			grid.free()
-		// 	}, 10000)
-		// }
+		{
+			let grid
+
+			const button = document.createElement('button')
+			button.textContent = 'grid'
+			button.addEventListener('click', () => {
+				if (grid != null) {
+					grid.free()
+					grid = null
+				} else {
+					grid = new ba.Grid(collective, new Vec2(-250., -250.), new Vec2(500., 0.), new Vec2(0., 500.))
+				}
+			})
+
+			document.getElementById('others').appendChild(button)
+		}
 
 		;[...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].forEach((char) => {
 			const button = document.createElement('button')
@@ -74,7 +83,7 @@
 				setTimeout(() => { cookie.free() }, 6000)
 			})
 
-			document.body.appendChild(button)
+			document.getElementById('cookies').appendChild(button)
 		})
 
 		return { collective, images }
