@@ -21,7 +21,7 @@
 
 		this.avoider = new Vec2(0., 0.)
 
-		this.halfDiagonal = Math.hypot(this.edgeMax.x - this.edgeMin.x, this.edgeMax.y - this.edgeMin.x) / 2
+		this.halfDiagonal = Math.hypot(this.edgeMax.x - this.edgeMin.x, this.edgeMax.y - this.edgeMin.y) / 2
 	}
 
 	Collective.prototype.setAvoider = function (location) {
@@ -163,6 +163,19 @@
 
 		this.bugs.forEach((bug) => { bug.advance(deltaTime) })
 		this.freeBugs.forEach((bug) => { bug.advance(deltaTime) })
+
+		for (let i = 0; i < this.freeBugs.length; i++) {
+			const freeBug = this.freeBugs[i]
+
+			if (
+				freeBug.location.x < this.beyondMin.x ||
+				freeBug.location.y < this.beyondMin.y ||
+				freeBug.location.x > this.beyondMax.x ||
+				freeBug.location.y > this.beyondMax.y
+			) {
+				this.freeBugs[i] = this.freeBugs.pop()
+			}
+		}
 	}
 
 	Collective.prototype.draw = function (draw, images) {
